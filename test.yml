@@ -1,0 +1,23 @@
+--- # 
+- hosts: all
+  gather_facts: yes
+  become: yes
+  tasks:
+#     - name: host ipv4 address
+#       debug: var=hostvars[inventory_hostname]['ansible_default_ipv4']['address']
+#       register: namenodeip
+
+     - name: setting fact
+       set_fact: namenodeipv4={{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }}
+       when: inventory_hostname in groups['namenode']
+
+     - name: set fact recall
+       debug: var=namenodeipv4
+       when: inventory_hostname in groups['namenode']
+     
+     - name: host ipv4 address
+       debug: var=groups['namenode']
+
+#     - debug: var={{ groups['namenode'] | map('extract', hostvars, ['ansible_default_ipv4', 'address']) |  }}
+     - debug: var=hostvars[groups['namenode']]
+          #['ansible_default_ipv4']['address']
